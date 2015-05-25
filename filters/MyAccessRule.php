@@ -3,6 +3,7 @@
 namespace app\filters;
 
 use yii\filters\AccessRule;
+use yii;
 
 class MyAccessRule extends AccessRule
 {

@@ -32,25 +32,28 @@ AppAsset::register($this);
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
-            $menuItems = [
+            
+            $navItems=[
                 ['label' => 'Провести эксперимент', 'url' => ['/dice/do-exp']],
-                ['label' => 'Результаты', 'url' => ['/dice/view']],
-            ];
-            /*
-            if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/site/signup']];
-                $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
-            } else {
-                $menuItems[] = [
-                    'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ];
-            }
-            */
+                ['label' => 'Результаты', 'url' => ['/dice/view']]
+              ];
+              if (Yii::$app->user->isGuest) {
+                array_push($navItems,['label' => 'Вход', 'url' => ['/user/security/login']],['label' => 'Зарегистрироваться', 'url' => ['/user/registration/register']]);
+              } else {
+                array_push($navItems,['label' => 'Выход (' . Yii::$app->user->identity->username . ')',
+                    'url' => ['/user/security/logout'],
+                    'linkOptions' => ['data-method' => 'post']]
+                );
+              }
+              if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin) {
+                  array_push($navItems,['label' => 'Админка',
+                          'url' => ['/user/admin/index'],
+                          'linkOptions' => ['data-method' => 'post']]
+                  );
+              }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => $menuItems,
+                'items' => $navItems
             ]);
             NavBar::end();
         ?>
