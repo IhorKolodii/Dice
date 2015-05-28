@@ -3,6 +3,7 @@
 $params = require(__DIR__ . '/params.php');
 
 $config = [
+  'name' => 'Dice!',
   'modules' => [
     'gii' => [
       'class' => 'system.gii.GiiModule',
