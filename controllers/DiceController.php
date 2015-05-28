@@ -12,34 +12,44 @@ use yii\filters\AccessControl;
 use app\filters\MyAccessRule;
 use yii\filters\VerbFilter;
 
-
 class DiceController extends Controller {
 
-  public function behaviors()
+  public function behaviors() {
+    return [
+      'access' => [
+        'class' => AccessControl::className(),
+        'ruleConfig' => [
+          'class' => MyAccessRule::className(),
+        ],
+        'only' => ['view', 'viewSelected', 'do-exp', 'exp-results'],
+        'rules' => [
+          [
+            'allow' => false,
+            'actions' => ['view', 'viewSelected', 'do-exp', 'exp-results'],
+            'roles' => ['?'],
+          ],
+          [
+            'allow' => true,
+            'actions' => ['view', 'viewSelected', 'do-exp', 'exp-results'],
+            'roles' => ['@'],
+          ],
+        ],
+      ],
+    ];
+  }
+
+  public function actions()
     {
-         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'ruleConfig' => [
-                    'class' => MyAccessRule::className(),
-                ],
-                'only' => ['view', 'viewSelected', 'do-exp','exp-results'],
-                'rules' => [
-                    [
-                        'allow' => false,
-                        'actions' => ['view', 'viewSelected', 'do-exp','exp-results'],
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['view', 'viewSelected', 'do-exp','exp-results'],
-                        'roles' => ['@'],
-                    ],
-                ],
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
             ],
         ];
     }
-  
+
   public function actionView() {
     $query = Experiment::find();
     $pagination = new Pagination([
@@ -134,76 +144,77 @@ class DiceController extends Controller {
       return "Ошибка записи в базу {$exp->id_exp}";
     }
   }
+
   /*
-  public function actionLogin() {
+    public function actionLogin() {
     if (!\Yii::$app->user->isGuest) {
-      return $this->goHome();
+    return $this->goHome();
     }
 
     $model = new LoginForm();
     if ($model->load(Yii::$app->request->post()) && $model->login()) {
-      return $this->goBack();
+    return $this->goBack();
     } else {
-      return $this->render('login', [
-            'model' => $model,
-      ]);
+    return $this->render('login', [
+    'model' => $model,
+    ]);
     }
-  }
+    }
 
-  public function actionLogout() {
+    public function actionLogout() {
     Yii::$app->user->logout();
 
     return $this->goHome();
-  }
+    }
 
-  public function actionSignup() {
+    public function actionSignup() {
     $model = new SignupForm();
     if ($model->load(Yii::$app->request->post())) {
-      if ($user = $model->signup()) {
-        if (Yii::$app->getUser()->login($user)) {
-          return $this->goHome();
-        }
-      }
+    if ($user = $model->signup()) {
+    if (Yii::$app->getUser()->login($user)) {
+    return $this->goHome();
+    }
+    }
     }
 
     return $this->render('signup', [
-          'model' => $model,
+    'model' => $model,
     ]);
-  }
+    }
 
-  public function actionRequestPasswordReset() {
+    public function actionRequestPasswordReset() {
     $model = new PasswordResetRequestForm();
     if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-      if ($model->sendEmail()) {
-        Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
+    if ($model->sendEmail()) {
+    Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
 
-        return $this->goHome();
-      } else {
-        Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
-      }
+    return $this->goHome();
+    } else {
+    Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+    }
     }
 
     return $this->render('requestPasswordResetToken', [
-          'model' => $model,
+    'model' => $model,
     ]);
-  }
+    }
 
-  public function actionResetPassword($token) {
+    public function actionResetPassword($token) {
     try {
-      $model = new ResetPasswordForm($token);
+    $model = new ResetPasswordForm($token);
     } catch (InvalidParamException $e) {
-      throw new BadRequestHttpException($e->getMessage());
+    throw new BadRequestHttpException($e->getMessage());
     }
 
     if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-      Yii::$app->getSession()->setFlash('success', 'New password was saved.');
+    Yii::$app->getSession()->setFlash('success', 'New password was saved.');
 
-      return $this->goHome();
+    return $this->goHome();
     }
 
     return $this->render('resetPassword', [
-          'model' => $model,
+    'model' => $model,
     ]);
-  }
-*/
+    }
+   */
 }
