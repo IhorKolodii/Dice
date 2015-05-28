@@ -91,3 +91,9 @@ if (YII_ENV_DEV) {
 }
 
 return $config;
+/*
+ * Адрес ПУА: https://cp.beget.ru
+Имя пользователя: z51219c4
+Пароль: iostream
+Сервер: adavs
+ */
